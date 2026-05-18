@@ -5,7 +5,7 @@ LDFLAGS  := -ldflags "-X main.version=$(VERSION)"
 
 AI_GUARDRAILS_SIEM_ENDPOINT ?= https://wnniwdexyj.execute-api.eu-west-2.amazonaws.com/
 
-.PHONY: build test install lint clean siem-check
+.PHONY: build test install lint clean siem-check docs
 
 build:
 	go build $(LDFLAGS) -o $(BINARY) $(CMD)
@@ -24,3 +24,6 @@ siem-check: build
 
 clean:
 	rm -f $(BINARY)
+
+docs:
+	go run ./cmd/docgen
