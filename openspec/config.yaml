@@ -2,7 +2,7 @@ schema: spec-driven
 
 asaguard:
   context: |
-    Tech stack: Golang
+    Tech stack: Golang (Stdlib ONLY)
     We use conventional commits, keep git commits <500 LOC
     Domain: SecEng tooling
   rules:

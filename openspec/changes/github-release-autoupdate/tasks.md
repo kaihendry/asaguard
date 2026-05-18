@@ -2,7 +2,7 @@
 
 - [x] 1.1 Create the public GitHub repo `kaihendry/asaguard` (public, no auto-init)
 - [x] 1.2 Update `go.mod` module path from `github.com/hendry/asaguard` to `github.com/kaihendry/asaguard` and fix all internal import paths
-- [ ] 1.3 Push existing code to `kaihendry/asaguard` main branch
+- [x] 1.3 Push existing code to `kaihendry/asaguard` main branch
 
 ## 2. Version Embedding
 
@@ -35,6 +35,6 @@
 
 ## 6. End-to-End Verification
 
-- [ ] 6.1 Push a commit to `main` and confirm the Actions run, a tag like `v20260518.42` is created, and binaries appear under the GitHub Release
-- [ ] 6.2 Download the release binary, run `asaguard version`, confirm it prints the date-based tag (not `dev`)
-- [ ] 6.3 Push a second commit, download the first release binary, run it, and confirm it self-updates to the second release
+- [x] 6.1 Push a commit to `main` and confirm the Actions run, a tag like `v20260518.42` is created, and binaries appear under the GitHub Release
+- [x] 6.2 Download the release binary, run `asaguard version`, confirm it prints the date-based tag (not `dev`)
+- [x] 6.3 Push a second commit, download the first release binary, run it, and confirm it self-updates to the second release
