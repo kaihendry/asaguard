@@ -1,0 +1,13 @@
+schema: spec-driven
+
+asaguard:
+  context: |
+    Tech stack: Golang
+    We use conventional commits, keep git commits <500 LOC
+    Domain: SecEng tooling
+  rules:
+    proposal:
+      - Keep proposals under 500 words
+      - Always include a "Non-goals" section
+    tasks:
+      - Break tasks into chunks of max 2 hours
