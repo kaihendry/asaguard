@@ -1,6 +1,7 @@
 package transcripts
 
 import (
+	"math"
 	"os"
 	"path/filepath"
 	"testing"
@@ -9,6 +10,50 @@ import (
 	"github.com/kaihendry/asaguard/internal/policy"
 	"github.com/kaihendry/asaguard/internal/result"
 )
+
+var defaultPrices = &policy.TokenPrices{
+	InputPerMillion:      3.00,
+	OutputPerMillion:     15.00,
+	CacheWritePerMillion: 3.75,
+	CacheReadPerMillion:  0.30,
+}
+
+func TestCostUSDZero(t *testing.T) {
+	s := sessionTokens{}
+	if got := s.CostUSD(defaultPrices); got != 0 {
+		t.Errorf("expected 0, got %f", got)
+	}
+}
+
+func TestCostUSDMixed(t *testing.T) {
+	s := sessionTokens{
+		InputTokens:  1_000_000,
+		OutputTokens: 1_000_000,
+		CacheWrite:   1_000_000,
+		CacheRead:    1_000_000,
+	}
+	want := 3.00 + 15.00 + 3.75 + 0.30
+	got := s.CostUSD(defaultPrices)
+	if math.Abs(got-want) > 1e-9 {
+		t.Errorf("expected %.4f, got %.4f", want, got)
+	}
+}
+
+func TestCacheSavingsZero(t *testing.T) {
+	s := sessionTokens{}
+	if got := s.CacheSavingsUSD(defaultPrices); got != 0 {
+		t.Errorf("expected 0, got %f", got)
+	}
+}
+
+func TestCacheSavingsMixed(t *testing.T) {
+	s := sessionTokens{CacheRead: 1_000_000}
+	want := (3.00 - 0.30) // per million
+	got := s.CacheSavingsUSD(defaultPrices)
+	if math.Abs(got-want) > 1e-9 {
+		t.Errorf("expected %.4f, got %.4f", want, got)
+	}
+}
 
 func writeTranscript(t *testing.T, dir, name, content string) {
 	t.Helper()
@@ -22,6 +67,41 @@ func transcriptsRoot(t *testing.T) string {
 	root := filepath.Join(home, ".claude", "projects", "proj1")
 	os.MkdirAll(root, 0700)
 	return root
+}
+
+func TestPrintStatsTable(t *testing.T) {
+	root := transcriptsRoot(t)
+	// 1M input + 500K output + 200K cache-write + 100K cache-read
+	line := `{"type":"assistant","sessionId":"s1","timestamp":"2026-01-01T00:00:00Z","message":{"usage":{"input_tokens":1000000,"output_tokens":500000,"cache_creation_input_tokens":200000,"cache_read_input_tokens":100000}}}` + "\n"
+	writeTranscript(t, root, "s1.jsonl", line)
+
+	sessions, err := collectTokens(time.Time{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(sessions) != 1 {
+		t.Fatalf("expected 1 session, got %d", len(sessions))
+	}
+	s := sessions[0]
+	if s.InputTokens != 1000000 {
+		t.Errorf("input: want 1000000, got %d", s.InputTokens)
+	}
+	if s.OutputTokens != 500000 {
+		t.Errorf("output: want 500000, got %d", s.OutputTokens)
+	}
+	if s.CacheWrite != 200000 {
+		t.Errorf("cache_write: want 200000, got %d", s.CacheWrite)
+	}
+	if s.CacheRead != 100000 {
+		t.Errorf("cache_read: want 100000, got %d", s.CacheRead)
+	}
+
+	// Cost: (1M*3 + 0.5M*15 + 0.2M*3.75 + 0.1M*0.30) / 1M = 3 + 7.5 + 0.75 + 0.03 = 11.28
+	wantCost := 11.28
+	gotCost := s.CostUSD(defaultPrices)
+	if math.Abs(gotCost-wantCost) > 1e-9 {
+		t.Errorf("cost: want %.4f, got %.4f", wantCost, gotCost)
+	}
 }
 
 func TestCheckTokensEmpty(t *testing.T) {

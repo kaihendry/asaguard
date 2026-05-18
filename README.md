@@ -25,6 +25,9 @@ asaguard settings
 asaguard mcps
 asaguard perms
 asaguard tokens --since 2026-01-01
+asaguard tokens --stats                   # cost + cache efficiency table by project
+asaguard tokens --stats --since 2026-05-01
+asaguard tokens --json                    # findings with cost_usd and cache_savings_usd fields
 asaguard network
 asaguard bypass
 asaguard sandbox
@@ -83,6 +86,12 @@ Create `~/.config/asaguard/policy.json` to override defaults:
   "sandbox_write_roots": ["/home/user/projects"],
   "hitl_watchlist": ["rm -rf", "git push", "curl "],
   "token_spike_multiple": 3.0,
+  "token_prices": {
+    "input_per_million": 3.00,
+    "output_per_million": 15.00,
+    "cache_write_per_million": 3.75,
+    "cache_read_per_million": 0.30
+  },
   "weights": {
     "settings": 15,
     "mcps": 15,
@@ -129,7 +138,7 @@ All fields are optional; built-in defaults are used for any omitted fields.
 | `settings`  | Required keys present, locked keys not overridden in `settings.local.json` |
 | `mcps`      | Active MCPs vs. approved allowlist; exfiltration-risk classification |
 | `perms`     | Allow/deny list sanity; open-by-default detection |
-| `tokens`    | Per-session token spikes vs. rolling average |
+| `tokens`    | Per-session token spikes vs. rolling average; `--stats` shows cost and cache efficiency by project |
 | `network`   | URLs accessed via WebFetch/curl vs. approved domain list |
 | `bypass`    | `--dangerously-skip-permissions`, `--no-verify` in transcripts |
 | `sandbox`   | File reads/writes outside authorised path roots |

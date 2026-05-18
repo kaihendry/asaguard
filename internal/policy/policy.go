@@ -16,8 +16,18 @@ type Policy struct {
 	SandboxWriteRoots    []string          `json:"sandbox_write_roots"`
 	HITLWatchlist        []string          `json:"hitl_watchlist"`
 	TokenSpikeMultiple   float64           `json:"token_spike_multiple"`
+	TokenPrices          TokenPrices       `json:"token_prices"`
 	Weights              map[string]int    `json:"weights"`
 	Banner               BannerConfig      `json:"banner"`
+}
+
+// TokenPrices holds per-million-token prices for each billing category.
+// Defaults reflect Claude Sonnet 4.x pricing.
+type TokenPrices struct {
+	InputPerMillion      float64 `json:"input_per_million"`
+	OutputPerMillion     float64 `json:"output_per_million"`
+	CacheWritePerMillion float64 `json:"cache_write_per_million"`
+	CacheReadPerMillion  float64 `json:"cache_read_per_million"`
 }
 
 type BannerConfig struct {
@@ -35,7 +45,13 @@ var defaults = Policy{
 	SandboxWriteRoots:    defaultSandboxRoots(),
 	HITLWatchlist:        defaultHITLWatchlist(),
 	TokenSpikeMultiple:   3.0,
-	Weights:              defaultWeights(),
+	TokenPrices: TokenPrices{
+		InputPerMillion:      3.00,
+		OutputPerMillion:     15.00,
+		CacheWritePerMillion: 3.75,
+		CacheReadPerMillion:  0.30,
+	},
+	Weights: defaultWeights(),
 	Banner: BannerConfig{
 		Text:      "Security reminder: follow your organisation's AI usage policy.",
 		PolicyURL: "",
@@ -131,6 +147,18 @@ func merge(base, override *Policy) {
 	}
 	if override.TokenSpikeMultiple > 0 {
 		base.TokenSpikeMultiple = override.TokenSpikeMultiple
+	}
+	if override.TokenPrices.InputPerMillion > 0 {
+		base.TokenPrices.InputPerMillion = override.TokenPrices.InputPerMillion
+	}
+	if override.TokenPrices.OutputPerMillion > 0 {
+		base.TokenPrices.OutputPerMillion = override.TokenPrices.OutputPerMillion
+	}
+	if override.TokenPrices.CacheWritePerMillion > 0 {
+		base.TokenPrices.CacheWritePerMillion = override.TokenPrices.CacheWritePerMillion
+	}
+	if override.TokenPrices.CacheReadPerMillion > 0 {
+		base.TokenPrices.CacheReadPerMillion = override.TokenPrices.CacheReadPerMillion
 	}
 	for k, v := range override.Weights {
 		base.Weights[k] = v
