@@ -1,3 +1,11 @@
+// Package policy loads and merges the asaguard organisation policy.
+//
+// All guard rails are configurable through a single policy.json file at
+// ~/.config/asaguard/policy.json. This package defines the full schema —
+// approved MCPs, allowed network domains, sandbox path roots, token-spike
+// thresholds, Claude API token prices, and scoring weights — and merges
+// any user-supplied overrides on top of safe defaults. If no policy file
+// is present the defaults are used, so asaguard works out of the box.
 package policy
 
 import (

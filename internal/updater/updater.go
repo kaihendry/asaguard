@@ -1,3 +1,11 @@
+// Package updater keeps the asaguard binary up to date automatically.
+//
+// On each run asaguard checks the latest release on GitHub and, if a newer
+// version is available, downloads the correct binary for the current OS and
+// architecture, replaces the running executable in place, and re-execs into the
+// new version — all transparently. Dev builds (version == "dev") skip the check
+// entirely. This ensures that guard rail definitions and detection logic stay
+// current without requiring manual update steps from engineers.
 package updater
 
 import (

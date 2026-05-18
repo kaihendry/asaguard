@@ -1,3 +1,10 @@
+// Package mcps audits the Model Context Protocol (MCP) servers installed in
+// Claude Code against an organisation-defined approved list and risk categories.
+//
+// MCP servers extend Claude's capabilities but also widen the attack surface for
+// data exfiltration. This guard rail flags any server that is not on the approved
+// list and warns about servers classified as high-exfiltration-risk, giving security
+// teams visibility into what external integrations are active.
 package mcps
 
 import (

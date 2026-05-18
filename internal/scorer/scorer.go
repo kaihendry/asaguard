@@ -1,3 +1,13 @@
+// Package scorer aggregates all guard rail results into a single weighted
+// compliance score from 0 to 100.
+//
+// Each check (settings, mcps, perms, tokens, network, bypass, sandbox, secrets)
+// contributes an equal share of the total by default; weights are tunable in
+// policy.json. A PASS earns full weight, WARN earns half, and FAIL earns nothing.
+// The score maps to four tiers: GOOD (≥85), ACCEPTABLE (≥70), AT RISK (≥50),
+// and CRITICAL (<50). A CRITICAL score causes asaguard to exit non-zero, making
+// it suitable as a CI gate. Results are also forwarded to the SIEM reporter so
+// every run is observable centrally.
 package scorer
 
 import (

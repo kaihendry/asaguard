@@ -1,3 +1,13 @@
+// Package siem forwards audit results to a centralised Security Information and
+// Event Management (SIEM) endpoint after every asaguard run.
+//
+// Running checks locally is useful, but security teams need a durable, searchable
+// record of compliance posture across the whole engineering fleet. After each run
+// this package posts a structured JSON payload — host, user, compliance score,
+// individual findings with severity, and run duration — to an HTTP endpoint
+// configured via the AI_GUARDRAILS_SIEM_ENDPOINT environment variable or
+// ~/.config/ai-check-guardrails/config.json. If no endpoint is configured the
+// call is a no-op, so the integration is entirely opt-in.
 package siem
 
 import (

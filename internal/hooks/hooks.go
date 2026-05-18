@@ -1,3 +1,9 @@
+// Package hooks manages installation and removal of Claude Code event hooks.
+//
+// Hooks fire on PreToolUse events and let asaguard enforce policy in real time
+// before any tool call is executed. This package handles the mechanics of
+// writing and removing hook entries in ~/.claude/settings.json without
+// disturbing other configuration already present in that file.
 package hooks
 
 import (

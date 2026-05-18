@@ -1,3 +1,22 @@
+// Package transcripts analyses Claude Code session transcripts to detect
+// four categories of risky behaviour after the fact.
+//
+// Bypass: flags sessions where --dangerously-skip-permissions was passed or
+// where Bash commands used --no-verify or --no-gpg-sign, which circumvent git
+// safety checks.
+//
+// Network: identifies WebFetch calls and curl/wget commands in Bash and checks
+// each target domain against the policy allowlist, surfacing unexpected
+// outbound connections.
+//
+// Sandbox: detects file Read, Write, Edit, and Bash accesses outside the
+// configured sandbox roots, catching attempts to reach sensitive paths such as
+// /etc, /var, or other users' home directories.
+//
+// Tokens: tracks token consumption per session and flags spikes that exceed a
+// configurable multiple of the per-session average. It also reports estimated
+// cost in USD and cache-hit efficiency per project, giving teams visibility into
+// Claude API spend without requiring direct access to billing dashboards.
 package transcripts
 
 import (

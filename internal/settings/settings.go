@@ -1,3 +1,12 @@
+// Package settings validates the Claude Code settings.json against the
+// organisation policy.
+//
+// Security teams often need certain keys to be present in every engineer's
+// Claude Code configuration (e.g. a required banner or a hook reference) and
+// need to ensure those keys cannot be silently overridden in the local settings
+// file. This guard rail checks for missing required keys, detects locked keys
+// that have been overridden in settings.local.json, and warns about unexpected
+// configuration drift.
 package settings
 
 import (
