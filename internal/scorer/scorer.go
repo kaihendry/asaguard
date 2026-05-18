@@ -7,14 +7,14 @@ import (
 	"os"
 	"time"
 
-	"github.com/hendry/asaguard/internal/mcps"
-	"github.com/hendry/asaguard/internal/perms"
-	"github.com/hendry/asaguard/internal/policy"
-	"github.com/hendry/asaguard/internal/result"
-	"github.com/hendry/asaguard/internal/secrets"
-	"github.com/hendry/asaguard/internal/settings"
-	"github.com/hendry/asaguard/internal/siem"
-	"github.com/hendry/asaguard/internal/transcripts"
+	"github.com/kaihendry/asaguard/internal/mcps"
+	"github.com/kaihendry/asaguard/internal/perms"
+	"github.com/kaihendry/asaguard/internal/policy"
+	"github.com/kaihendry/asaguard/internal/result"
+	"github.com/kaihendry/asaguard/internal/secrets"
+	"github.com/kaihendry/asaguard/internal/settings"
+	"github.com/kaihendry/asaguard/internal/siem"
+	"github.com/kaihendry/asaguard/internal/transcripts"
 )
 
 type CheckResult struct {

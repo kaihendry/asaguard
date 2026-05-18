@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hendry/asaguard/internal/policy"
-	"github.com/hendry/asaguard/internal/result"
+	"github.com/kaihendry/asaguard/internal/policy"
+	"github.com/kaihendry/asaguard/internal/result"
 )
 
 func sandboxRoot(t *testing.T) (home, projRoot string) {

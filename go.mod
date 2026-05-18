@@ -1,3 +1,3 @@
-module github.com/hendry/asaguard
+module github.com/kaihendry/asaguard
 
 go 1.26.2

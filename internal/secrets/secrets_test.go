@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/hendry/asaguard/internal/result"
+	"github.com/kaihendry/asaguard/internal/result"
 )
 
 func inDir(t *testing.T, dir string) {

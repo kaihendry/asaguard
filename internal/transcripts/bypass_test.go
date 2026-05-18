@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hendry/asaguard/internal/result"
+	"github.com/kaihendry/asaguard/internal/result"
 )
 
 func bypassRoot(t *testing.T) string {

@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/hendry/asaguard/internal/policy"
-	"github.com/hendry/asaguard/internal/result"
+	"github.com/kaihendry/asaguard/internal/policy"
+	"github.com/kaihendry/asaguard/internal/result"
 )
 
 func writeSettings(t *testing.T, home string, v any) {

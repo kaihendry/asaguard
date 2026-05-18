@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hendry/asaguard/internal/policy"
-	"github.com/hendry/asaguard/internal/result"
+	"github.com/kaihendry/asaguard/internal/policy"
+	"github.com/kaihendry/asaguard/internal/result"
 )
 
 type sandboxViolation struct {

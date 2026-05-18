@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hendry/asaguard/internal/result"
+	"github.com/kaihendry/asaguard/internal/result"
 )
 
 var knownScanners = []string{"gitleaks", "trufflehog", "detect-secrets"}
