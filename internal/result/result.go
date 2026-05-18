@@ -1,10 +1,11 @@
-// Package result defines the common finding type shared by all guard rails.
+// Package result defines the shared output format for every guard rail finding.
 //
-// Every check returns a slice of Finding values, each carrying a severity level
-// (PASS, WARN, or FAIL), the name of the check that produced it, and a
-// human-readable message. This uniform structure lets the scorer aggregate
-// results from all checks, drives the SIEM reporter, and means any guard rail
-// can be run and read in isolation with a consistent output format.
+// Each check emits a slice of Finding values with a severity level — PASS,
+// WARN, or FAIL — along with the check name and a plain-English explanation.
+// The consistent format means findings from any guard rail can be aggregated
+// by the scorer, forwarded to a SIEM, or printed on the terminal without any
+// per-check adapters. It also means engineers see the same output shape
+// whether they run a single check or the full suite.
 package result
 
 import (

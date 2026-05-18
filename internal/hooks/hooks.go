@@ -1,9 +1,12 @@
-// Package hooks manages installation and removal of Claude Code event hooks.
+// Package hooks installs the real-time enforcement layer into Claude Code.
 //
-// Hooks fire on PreToolUse events and let asaguard enforce policy in real time
-// before any tool call is executed. This package handles the mechanics of
-// writing and removing hook entries in ~/.claude/settings.json without
-// disturbing other configuration already present in that file.
+// Anthropic recommends wiring PreToolUse event hooks for adversarial input
+// review and private data protection. This package does exactly that: it
+// registers hook commands that fire before every tool call, enabling live
+// policy checks and — crucially — installing a security banner that appears
+// at the start of each session and links engineers to the organisation's AI
+// usage policy. Without these hooks, asaguard can only audit after the fact;
+// with them it can intercept, warn, or block in real time.
 package hooks
 
 import (

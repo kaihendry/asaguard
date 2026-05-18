@@ -1,13 +1,14 @@
-// Package siem forwards audit results to a centralised Security Information and
-// Event Management (SIEM) endpoint after every asaguard run.
+// Package siem gives security teams fleet-wide visibility into AI tool usage.
 //
-// Running checks locally is useful, but security teams need a durable, searchable
-// record of compliance posture across the whole engineering fleet. After each run
-// this package posts a structured JSON payload — host, user, compliance score,
-// individual findings with severity, and run duration — to an HTTP endpoint
-// configured via the AI_GUARDRAILS_SIEM_ENDPOINT environment variable or
-// ~/.config/ai-check-guardrails/config.json. If no endpoint is configured the
-// call is a no-op, so the integration is entirely opt-in.
+// Individual checks run on developer machines and are only visible to the
+// engineer who ran them. The SIEM reporter bridges that gap: after every
+// asaguard run it posts a structured JSON payload — host, user, compliance
+// score, individual findings with severity, and run duration — to a central
+// HTTP endpoint. This creates a durable, searchable audit trail of how Claude
+// Code is being used and how well-configured each installation is across the
+// whole engineering organisation, without requiring engineers to change their
+// workflow. Configure the endpoint via AI_GUARDRAILS_SIEM_ENDPOINT; if unset
+// the call is a no-op.
 package siem
 
 import (

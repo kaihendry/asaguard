@@ -1,12 +1,13 @@
-// Package secrets verifies that a secret-scanning tool is in place to prevent
-// credentials from being committed to source control.
+// Package secrets checks that a pre-commit secret scanner is active.
 //
-// AI coding assistants increase the risk of accidental secret exposure because
-// they write and commit code at high speed. This guard rail checks that a
-// recognised secret scanner — gitleaks, trufflehog, or detect-secrets — is
-// wired into the git pre-commit hook or declared in .pre-commit-config.yaml.
-// If no scanner is found the check fails, prompting engineers to add one before
-// Claude Code is used further.
+// AI coding assistants write and commit code at speed, which dramatically
+// increases the chance of accidentally committing an API key, private
+// certificate, or database credential. A secret scanner in the pre-commit hook
+// is the last line of defence before those secrets reach the remote. This guard
+// rail verifies that gitleaks, trufflehog, or detect-secrets is wired into
+// .git/hooks/pre-commit or declared in .pre-commit-config.yaml. If no scanner
+// is found the check fails, making secret-leak prevention a hard requirement
+// before Claude Code is used on the codebase.
 package secrets
 
 import (

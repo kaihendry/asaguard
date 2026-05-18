@@ -1,22 +1,28 @@
-// Package transcripts analyses Claude Code session transcripts to detect
-// four categories of risky behaviour after the fact.
+// Package transcripts audits recorded Claude Code sessions for four classes of
+// risky behaviour, turning the session transcript log into a security signal.
 //
-// Bypass: flags sessions where --dangerously-skip-permissions was passed or
-// where Bash commands used --no-verify or --no-gpg-sign, which circumvent git
-// safety checks.
+// Policy bypass: detects sessions launched with --dangerously-skip-permissions,
+// which disables all tool approval prompts, or Bash commands that used
+// --no-verify or --no-gpg-sign to circumvent git safety hooks. These flags are
+// the clearest sign that a user is actively evading the controls asaguard
+// enforces.
 //
-// Network: identifies WebFetch calls and curl/wget commands in Bash and checks
-// each target domain against the policy allowlist, surfacing unexpected
-// outbound connections.
+// Network access: inspects every WebFetch call and curl/wget Bash command and
+// checks each target URL against the policy domain allowlist. This surfaces what
+// external services Claude is contacting — package registries, internal APIs,
+// third-party endpoints — and flags anything outside the approved list.
 //
-// Sandbox: detects file Read, Write, Edit, and Bash accesses outside the
-// configured sandbox roots, catching attempts to reach sensitive paths such as
-// /etc, /var, or other users' home directories.
+// Sandbox enforcement: verifies that all file Read, Write, Edit, and Bash
+// accesses stayed within the authorised path roots. Accesses to /etc, /var,
+// other users' home directories, or any path outside the sandbox roots are
+// flagged, confirming that Claude only touched data it was supposed to.
 //
-// Tokens: tracks token consumption per session and flags spikes that exceed a
-// configurable multiple of the per-session average. It also reports estimated
-// cost in USD and cache-hit efficiency per project, giving teams visibility into
-// Claude API spend without requiring direct access to billing dashboards.
+// Token usage and cost: tracks token consumption per session and flags spikes
+// that exceed a configurable multiple of the rolling per-session average —
+// a pattern associated with prompt injection, runaway agents, or accidental
+// bulk processing. It also reports estimated cost in USD and cache-hit
+// efficiency per project, giving teams visibility into Claude API spend without
+// needing direct access to billing dashboards.
 package transcripts
 
 import (

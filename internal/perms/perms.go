@@ -1,10 +1,12 @@
-// Package perms validates the Claude Code permission configuration.
+// Package perms validates that Claude Code's permission posture is intentional.
 //
-// Claude Code ships in an open-by-default mode: if no allow or deny lists are
-// configured, every tool is accessible without a prompt. This guard rail detects
-// that permissive state and verifies that key tools (Bash, WebSearch) are
-// accessible as expected. It encourages operators to adopt an explicit
-// permission posture before deploying Claude Code to engineering teams.
+// Claude Code ships permissive by default: with no allow or deny lists configured,
+// every tool — including unrestricted Bash execution — runs without a confirmation
+// prompt. This guard rail runs access probes to confirm that restrictions are
+// actually in place and working as intended. It catches the common mistake of
+// deploying Claude Code to an engineering team before locking down which tools
+// require approval, ensuring the permission model is an explicit security decision
+// rather than an accident of default configuration.
 package perms
 
 import (
