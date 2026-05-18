@@ -1,4 +1,4 @@
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: Parse transcript token usage
 The CLI SHALL read Claude Code JSONL transcripts from `~/.claude/projects/` and extract per-session token counts as four separate categories: input (uncached), output, cache-write, and cache-read.
