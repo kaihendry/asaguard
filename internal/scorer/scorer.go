@@ -13,6 +13,7 @@ import (
 	"github.com/hendry/asaguard/internal/result"
 	"github.com/hendry/asaguard/internal/secrets"
 	"github.com/hendry/asaguard/internal/settings"
+	"github.com/hendry/asaguard/internal/siem"
 	"github.com/hendry/asaguard/internal/transcripts"
 )
 
@@ -96,7 +97,8 @@ func runAllChecks(pol *policy.Policy) []CheckResult {
 }
 
 // Run executes the scorer subcommand.
-func Run(args []string) {
+func Run(args []string, version string) {
+	start := time.Now()
 	fs := flag.NewFlagSet("score", flag.ExitOnError)
 	jsonOut := fs.Bool("json", false, "JSON output")
 	fs.Parse(args)
@@ -110,18 +112,26 @@ func Run(args []string) {
 	checks := runAllChecks(pol)
 	report := buildReport(checks)
 
+	exitCode := 0
+	if report.Total < 50 {
+		exitCode = 1
+	}
+
 	if *jsonOut {
 		json.NewEncoder(os.Stdout).Encode(report)
+		siem.Report(version, allFindings(report), report.Total, exitCode, start)
 		return
 	}
 	printReport(report)
-	if report.Total < 50 {
+	siem.Report(version, allFindings(report), report.Total, exitCode, start)
+	if exitCode == 1 {
 		os.Exit(1)
 	}
 }
 
 // RunCheck is called by `asaguard check` to run all checks and print summary.
-func RunCheck(jsonOut bool) {
+func RunCheck(jsonOut bool, version string) {
+	start := time.Now()
 	pol, err := policy.Load()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "policy load error:", err)
@@ -131,8 +141,14 @@ func RunCheck(jsonOut bool) {
 	checks := runAllChecks(pol)
 	report := buildReport(checks)
 
+	exitCode := 0
+	if report.Total < 50 {
+		exitCode = 1
+	}
+
 	if jsonOut {
 		json.NewEncoder(os.Stdout).Encode(report)
+		siem.Report(version, allFindings(report), report.Total, exitCode, start)
 		return
 	}
 
@@ -142,9 +158,18 @@ func RunCheck(jsonOut bool) {
 	}
 	fmt.Println()
 	printReport(report)
-	if report.Total < 50 {
+	siem.Report(version, allFindings(report), report.Total, exitCode, start)
+	if exitCode == 1 {
 		os.Exit(1)
 	}
+}
+
+func allFindings(r ScoreReport) []result.Finding {
+	var out []result.Finding
+	for _, c := range r.Checks {
+		out = append(out, c.Notes...)
+	}
+	return out
 }
 
 func buildReport(checks []CheckResult) ScoreReport {

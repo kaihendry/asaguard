@@ -44,6 +44,28 @@ asaguard install-hooks --banner --url https://policy.example.com
 asaguard uninstall-hooks --evals --hitl --banner
 ```
 
+## SIEM reporting
+
+`asaguard check` (and `asaguard score`) can POST audit findings to any HTTP endpoint that speaks the `AI_GUARDRAILS_SIEM_ENDPOINT` v1.0 schema:
+
+```sh
+export AI_GUARDRAILS_SIEM_ENDPOINT=https://<your-endpoint>/
+export AI_GUARDRAILS_SIEM_TOKEN=<bearer-token>   # optional
+asaguard check
+```
+
+Each run POSTs a JSON payload containing the run ID, timestamp, host, user, all findings with severity, and the compliance score. Failures are logged to stderr and do not change the exit code.
+
+Config-file alternative — set `siem_endpoint` in `~/.config/ai-check-guardrails/config.json`:
+
+```json
+{
+  "siem_endpoint": "https://<your-endpoint>/"
+}
+```
+
+The environment variable takes precedence over the config file.
+
 ## Policy configuration
 
 Create `~/.config/asaguard/policy.json` to override defaults:
